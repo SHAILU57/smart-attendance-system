@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - Smart Attendance</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-icon">&#9672;</span>
+        SmartAttendance
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="auth-shell">
+    <div class="auth-card" style="max-width:560px;">
+      <h1>Create your account</h1>
+      <p class="auth-sub">
+        Register as a <strong>student</strong>. Teacher and Admin accounts are created by the Admin.
+        After registering, your unique personal QR code is generated automatically.
+      </p>
+
+      <form id="registerForm" novalidate>
+        <div class="form-group">
+          <label for="studentId">Student ID</label>
+          <input type="text" id="studentId" class="form-control" placeholder="e.g. STU001" maxlength="20" />
+          <div class="form-error" id="studentIdError">Student ID is required (3-20 characters).</div>
+        </div>
+
+        <div class="form-group">
+          <label for="name">Full name</label>
+          <input type="text" id="name" class="form-control" placeholder="e.g. Lakshmi" maxlength="100" />
+          <div class="form-error" id="nameError">Full name is required.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" id="email" class="form-control" placeholder="you@college.edu" />
+          <div class="form-error" id="emailError">A valid email is required.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone (optional)</label>
+          <input type="tel" id="phone" class="form-control" placeholder="10-digit mobile number" />
+          <div class="form-error" id="phoneError">Phone must be 10-15 digits.</div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="department">Department</label>
+            <select id="department" class="form-control">
+              <option value="">Select department</option>
+              <option>CSE</option>
+              <option>ECE</option>
+              <option>EEE</option>
+              <option>MECH</option>
+              <option>CIVIL</option>
+              <option>IT</option>
+            </select>
+            <div class="form-error" id="departmentError">Department is required.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="year">Year</label>
+            <select id="year" class="form-control">
+              <option value="">Select year</option>
+              <option>1st Year</option>
+              <option>2nd Year</option>
+              <option>3rd Year</option>
+              <option>4th Year</option>
+            </select>
+            <div class="form-error" id="yearError">Year is required.</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="section">Section</label>
+          <select id="section" class="form-control">
+            <option value="">Select section</option>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+          </select>
+          <div class="form-error" id="sectionError">Section is required.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="form-control" placeholder="Minimum 6 characters, letters + numbers" autocomplete="new-password" />
+          <div class="pw-strength"><span id="pwBar"></span></div>
+          <div class="form-error" id="passwordError">Password must be 6+ characters with letters and numbers.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm password</label>
+          <input type="password" id="confirmPassword" class="form-control" placeholder="Repeat your password" autocomplete="new-password" />
+          <div class="form-error" id="confirmPasswordError">Passwords do not match.</div>
+        </div>
+
+        <button type="submit" class="btn btn-block btn-lg" id="registerBtn">Create account</button>
+      </form>
+
+      <p class="auth-alt">
+        Already have an account? <a href="login.html">Login here</a>
+      </p>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

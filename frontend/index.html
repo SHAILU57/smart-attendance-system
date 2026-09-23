@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Attendance System</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ================= NAVBAR ================= -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-icon">&#9672;</span>
+        SmartAttendance
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">&#9776;</button>
+      <div class="nav-links" id="navLinks">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="login.html" class="btn btn-sm">Login</a>
+        <a href="register.html" class="btn btn-sm btn-success">Register</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================= HERO ================= -->
+  <header class="hero">
+    <h1>Smart Attendance with <span>QR + Face + Location</span> verification</h1>
+    <p>
+      One complete system that verifies <em>who</em> you are, <em>faces</em> the matching identity,
+      and <em>where</em> you are &mdash; GPS college fence, indoor building/floor/room zone, plus the
+      correct scheduled class. No proxies. No fake attendance.
+    </p>
+    <div class="chips">
+      <span class="chip">&#128274; QR / Barcode</span>
+      <span class="chip">&#128100; Face Recognition</span>
+      <span class="chip">&#128506; GPS Geofencing</span>
+      <span class="chip">&#128204; Indoor Positioning</span>
+      <span class="chip">&#127891; Classroom Check</span>
+    </div>
+    <div class="hero-actions">
+      <a href="register.html" class="btn btn-lg btn-primary-hero">Get started &rarr;</a>
+      <a href="login.html" class="btn btn-lg btn-white">Login</a>
+    </div>
+  </header>
+
+  <!-- ================= FEATURES ================= -->
+  <section class="section" id="features">
+    <div class="container">
+      <h2 class="section-title center">Verification Layers</h2>
+      <p class="section-sub center">
+        Attendance is only accepted when every layer passes. Even inside the college campus,
+        a wrong building, floor or room means the attendance is not accepted.
+      </p>
+      <div class="features">
+
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#eef2ff;color:#4f46e5;">&#128274;</div>
+          <h3>QR / Barcode Identity</h3>
+          <p>Each student gets a unique QR code containing only a safe private token. Scanning it identifies the student instantly. Tampered or unknown QR codes are rejected.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#fce7f3;color:#db2777;">&#128100;</div>
+          <h3>Face Recognition</h3>
+          <p>A real face-embedding comparison verifies the person presenting the QR is the registered student &mdash; not face detection, but actual recognition to stop proxy attendance.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#ecfdf5;color:#059669;">&#128506;</div>
+          <h3>GPS Geofencing</h3>
+          <p>The browser's Geolocation API confirms the student is inside the college area using Haversine distance. GPS checks the campus only &mdash; never exact rooms or floors.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#fff7ed;color:#ea580c;">&#128204;</div>
+          <h3>Indoor Positioning</h3>
+          <p>BLE / Wi-Fi beacon based building, floor and zone detection with admin-configurable mappings, plus a clearly-labelled demo indoor location mode.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#e0f2fe;color:#0284c7;">&#127891;</div>
+          <h3>Classroom Verification</h3>
+          <p>Matches the detected building / floor / room against the timetable for the live class. Wrong location &rarr; attendance rejected according to configured policy.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#fef3c7;color:#d97706;">&#128202;</div>
+          <h3>Role Dashboards</h3>
+          <p>Separate student, teacher and admin portals. Attendance history, reports, multi-factor verification records, and CSV export &mdash; with role-based security.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HOW IT WORKS ================= -->
+  <section class="section section-alt" id="how">
+    <div class="container">
+      <h2 class="section-title center">How attendance works</h2>
+      <p class="section-sub center">
+        Every attempt runs through the full verification pipeline below before a record is written.
+      </p>
+      <div class="flow-steps">
+        <div class="step"><h4>Login</h4><p>Student logs in securely with their account.</p></div>
+        <div class="step"><h4>Class & QR</h4><p>Student selects the current class and scans their QR.</p></div>
+        <div class="step"><h4>Face</h4><p>Face embedding is compared with the registered template.</p></div>
+        <div class="step"><h4>GPS</h4><p>Geofence check confirms the student is on campus.</p></div>
+        <div class="step"><h4>Indoor</h4><p>BLE/Wi-Fi zone check finds building, floor, room.</p></div>
+        <div class="step"><h4>Timetable</h4><p>Expected location must match the scheduled class.</p></div>
+        <div class="step"><h4>Duplicate</h4><p>Repeated marks for the same class are prevented.</p></div>
+        <div class="step"><h4>Marked</h4><p>PRESENT is stored with verification records in MongoDB.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ROLES ================= -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title center">Built for three roles</h2>
+      <div class="features">
+        <div class="feature-card">
+          <h3>&#127891; Student</h3>
+          <p>Own profile, personal QR code, face registration, today's classes, timetable, own attendance percentage and history &mdash; never other students' data.</p>
+        </div>
+        <div class="feature-card">
+          <h3>&#128214; Teacher</h3>
+          <p>Start attendance sessions, view per-class attendance and live verification results, see recent verified locations and rejection reasons, export reports.</p>
+        </div>
+        <div class="feature-card">
+          <h3>&#128295; Admin</h3>
+          <p>Manage students, teachers, buildings, floors, classrooms, indoor zones, timetables, GPS/geofence settings, and view system reports and logs.</p>
+        </div>
+      </div>
+      <div class="auth-banner center mt-24" style="justify-content:center;text-align:center;flex-direction:column;">
+        <div>
+          <h2>Ready to try it?</h2>
+          <p>Register a student account, or use the demo accounts that are seeded with the sample data.</p>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+          <a href="register.html" class="btn btn-lg btn-white">Register as Student</a>
+          <a href="login.html" class="btn btn-lg btn-success">Login</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    Smart Attendance System &mdash; QR / Face Recognition / GPS / Indoor Location &mdash; College Project
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
