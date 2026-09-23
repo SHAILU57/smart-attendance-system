@@ -103,15 +103,26 @@ function render(rows) {
     ? rows
         .map(
           (r) => `<tr>
-            <td><b>${UI.escapeHtml(r.studentId)}</b></td>
-            <td>${UI.escapeHtml(r.studentName)}</td>
+            <td><b>${UI.escapeHtml(r.studentId || '')}</b> ${UI.escapeHtml(r.studentName || '')}
+              <div class="text-sm text-muted">${UI.escapeHtml(
+                ((r.department || '') + ' ' + (r.year || '') + ' ' + (r.section || '')).trim() || '-'
+              )}</div>
+            </td>
             <td>${UI.escapeHtml(UI.formatDate(r.date || r.createdAt))}</td>
-            <td>${UI.escapeHtml(r.subjectName)}</td>
+            <td>${UI.escapeHtml(r.subjectName || '-')}</td>
             <td>${UI.badge(r.status)}</td>
+            <td>${UI.escapeHtml(r.room || '-')}</td>
+            <td>${UI.escapeHtml(r.expectedRoom || '-')}</td>
+            <td class="text-sm">
+              ${r.rejectionReason ? UI.escapeHtml(r.rejectionReason)
+                : r.status === 'PRESENT'
+                ? 'QR \u2713 Face \u2713 GPS \u2713 Indoor \u2713 TT \u2713'
+                : '-'}
+            </td>
           </tr>`
         )
         .join('')
-    : `<tr class="empty-row"><td colspan="5">No attendance records match these filters yet. Records appear once attendance is marked (Stage 4).</td></tr>`;
+    : `<tr class="empty-row"><td colspan="7">No attendance records match these filters. Records appear once attendance is marked.</td></tr>`;
 }
 
 function exportCSV() {
@@ -119,16 +130,28 @@ function exportCSV() {
     UI.toast('Nothing to export yet.', 'warning');
     return;
   }
-  const header = ['StudentID', 'StudentName', 'Date', 'Subject', 'Status'];
+  const header = ['StudentID', 'StudentName', 'Department', 'Year', 'Section', 'Date', 'Subject', 'Status', 'Room', 'ExpectedRoom', 'RejectionReason'];
   const lines = lastRows.map((r) =>
-    [r.studentId, `"${r.studentName}"`, r.date || '', r.subjectName, r.status].join(',')
+    [
+      r.studentId || '',
+      `"${r.studentName || ''}"`,
+      r.department || '',
+      r.year || '',
+      r.section || '',
+      r.date || '',
+      `"${r.subjectName || ''}"`,
+      r.status,
+      r.room || '',
+      r.expectedRoom || '',
+      `"${r.rejectionReason || ''}"`,
+    ].join(',')
   );
   const csv = '\uFEFF' + [header.join(','), ...lines].join('\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `attendance-report-${Date.now()}.csv`;
+  a.download = `attendance-report-${new Date().toISOString().slice(0, 10)}.csv`;
   a.click();
   URL.revokeObjectURL(a.href);
-  UI.toast('CSV downloaded.');
+  UI.toast('CSV downloaded.', 'success');
 }

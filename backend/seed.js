@@ -302,6 +302,67 @@ async function seed() {
     },
   ]);
 
+  console.log('=== Seeding demo attendance records (for reports/history) ===');
+
+  const live1 = await AttendanceSession.findOne({ code: 'LIVE1' });
+  const live2 = await AttendanceSession.findOne({ code: 'LIVE2' });
+
+  await AttendanceRecord.create([
+    {
+      session: live1._id,
+      student: students[0]._id, // STU001 Lakshmi
+      date: localDate,
+      subject: subjects[0]._id,
+      subjectName: subjects[0].name,
+      status: 'PRESENT',
+      qrVerified: true, faceVerified: true, gpsVerified: true, indoorVerified: true, timetableVerified: true,
+      faceDistance: 0.12, gpsDistanceMeters: 18,
+      building: 'Block A', floor: '2', room: 'A204',
+      expectedBuilding: 'Block A', expectedFloor: '2', expectedRoom: 'A204',
+      markedBy: admin._id, checkinTime: new Date(),
+    },
+    {
+      session: live1._id,
+      student: students[1]._id, // STU002 Student2
+      date: localDate,
+      subject: subjects[0]._id,
+      subjectName: subjects[0].name,
+      status: 'PRESENT',
+      qrVerified: true, faceVerified: true, gpsVerified: true, indoorVerified: true, timetableVerified: true,
+      faceDistance: 0.09, gpsDistanceMeters: 24,
+      building: 'Block A', floor: '2', room: 'A204',
+      expectedBuilding: 'Block A', expectedFloor: '2', expectedRoom: 'A204',
+      markedBy: admin._id, checkinTime: new Date(),
+    },
+    {
+      session: live1._id,
+      student: students[3]._id, // STU004 Anjali - REJECTED: wrong room
+      date: localDate,
+      subject: subjects[0]._id,
+      subjectName: subjects[0].name,
+      status: 'REJECTED',
+      qrVerified: true, faceVerified: true, gpsVerified: true, indoorVerified: true, timetableVerified: false,
+      faceDistance: 0.21, gpsDistanceMeters: 30,
+      building: 'Block B', floor: '1', room: 'B105',
+      expectedBuilding: 'Block A', expectedFloor: '2', expectedRoom: 'A204',
+      rejectionReason: 'wrong classroom: timetable expects A204, you are in B105',
+      markedBy: admin._id, checkinTime: new Date(),
+    },
+    {
+      session: live2._id,
+      student: students[2]._id, // STU003 Student3 - ECE PRESENT
+      date: localDate,
+      subject: subjects[3]._id,
+      subjectName: subjects[3].name,
+      status: 'PRESENT',
+      qrVerified: true, faceVerified: true, gpsVerified: true, indoorVerified: true, timetableVerified: true,
+      faceDistance: 0.15, gpsDistanceMeters: 12,
+      building: 'Block B', floor: '1', room: 'B105',
+      expectedBuilding: 'Block B', expectedFloor: '1', expectedRoom: 'B105',
+      markedBy: admin._id, checkinTime: new Date(),
+    },
+  ]);
+
   console.log('=== Writing startup log ===');
 
   await SystemLog.create({

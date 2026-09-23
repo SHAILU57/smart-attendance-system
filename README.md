@@ -37,7 +37,8 @@ SmartAttendance/
 │   └── js/ (api.js, auth.js, main.js, student.js, teacher.js, admin.js,
 │            timetable.js, history.js, reports.js, student-nav.js,
 │            qr-scanner.js, face-camera.js, face-register.js,
-│            face-verify.js, location-check.js)
+│            face-verify.js, location-check.js, attendance.js)
+├── docs/                    # Project documentation set (see index below)
 └── README.md
 ```
 
@@ -232,7 +233,42 @@ Seeded zones (`npm run seed`): `ZONE_A204` (Block A / Floor 2 / room **A204**, b
 | Dashboard % | After check-ins, reopen student dashboard | Attendance % + per-subject % updated |
 | Records | Teacher dashboard → session → View records | PRESENT/REJECTED list with reasons |
 
+## What's in Stage 5 (reports, completion & documentation)
+
+- **Live reports** — `GET /api/reports/attendance` (`backend/controllers/reportController.js`)
+  aggregates attendance records with filters (date, department, year, section, subject)
+  and is role-aware: a teacher only ever sees their own sessions.
+  The **Reports** page now renders real data with stat cards (Total / Present / Absent /
+  Rejected), a detail table (student, date, subject, status, actual room, expected room,
+  reason/checks) and **CSV export**.
+- **Seeded demo records** so reports/history have data immediately after `npm run seed`
+  (3 in LIVE1, 1 in LIVE2, including a REJECTED "wrong classroom" example).
+- **Logo/settings/logs polish** — admin settings and audit-log tabs ship wired to the
+  backend (see admin-dashboard.html, admin.js).
+- **Full documentation set** in `docs/`:
+  | File | Contents |
+  |------|----------|
+  | `docs/01-abstract.md` | Abstract |
+  | `docs/02-problem-statement.md` | Problem statement |
+  | `docs/03-architecture.md` | System architecture + security/privacy design |
+  | `docs/04-er-diagram.md` | Entity-Relationship diagram (described) |
+  | `docs/05-dfd.md` | Data Flow Diagrams (levels 0 & 1) |
+  | `docs/06-use-cases.md` | Use-case descriptions |
+  | `docs/07-test-cases.md` | Complete test-case tables (A–H) |
+  | `docs/08-user-manual.md` | User manual (student/teacher/admin + troubleshooting) |
+  | `docs/09-conclusion.md` | Conclusion, limitations & future scope |
+
+### Stage 5 test table
+
+| Test | How | Expected |
+|------|-----|----------|
+| Report (admin) | Reports → Generate | All records with stat cards |
+| Report (teacher) | Same page as teacher | Only the teacher's own sessions' records |
+| Filter | Reports → Department = CSE | Only CSE students' records |
+| CSV | Export CSV | Downloads a `.csv` with header + matching rows |
+| Docs | Open any file in `docs/` | Content matches this app (no placeholders) |
+
 ## Coming in the next stages
 
-- **Stage 4:** Attendance sessions, the full verification pipeline (QR → Face → GPS → Indoor → Timetable), marking + history + percentages, teacher reports
-- **Stage 5:** Reports + CSV export, system settings, logs, final documentation (abstract, architecture, test cases, user manual)
+The project is complete through **Stage 5**. Any remaining work would be optional
+enhancements listed under *Future scope* in `docs/09-conclusion.md`.

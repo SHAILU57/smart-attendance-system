@@ -26,6 +26,7 @@ const logRoutes = require('./routes/logs');
 const faceRoutes = require('./routes/face');
 const locationRoutes = require('./routes/location');
 const attendanceRoutes = require('./routes/attendance');
+const reportRoutes = require('./routes/reports');
 
 // ---- Connect database (exits the process if it fails) ----
 connectDB();
@@ -88,6 +89,7 @@ app.use('/api/logs', logRoutes);
 app.use('/api/face', faceRoutes);
 app.use('/api/location', locationRoutes);
 app.use('/api/attendance', attendanceRoutes);
+app.use('/api/reports', reportRoutes);
 
 // ---- Health check ----
 app.get('/api/health', (req, res) => {
