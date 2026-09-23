@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Attendance History - Smart Attendance</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <nav class="navbar" style="display:none;"></nav>
+
+  <div class="dash">
+    <aside class="sidebar" id="studentSidebar"></aside>
+
+    <main class="dash-main">
+      <header class="page-header">
+        <div>
+          <h1>Attendance History</h1>
+          <p class="sub">Your attendance records, security-checked.</p>
+        </div>
+        <div>
+          <span class="badge badge-success" id="attPct">%</span>
+        </div>
+      </header>
+
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-icon" style="background:var(--success-light);color:var(--success);">&#10004;</div><div><div class="stat-value" id="presentCount">0</div><div class="stat-label">Present</div></div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--danger-light);color:var(--danger);">&#10008;</div><div><div class="stat-value" id="absentCount">0</div><div class="stat-label">Absent</div></div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--warning-light);color:var(--warning);">&#9888;</div><div><div class="stat-value" id="rejectedCount">0</div><div class="stat-label">Rejected</div></div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--info-light);color:var(--info);">&#9201;</div><div><div class="stat-value" id="totalCount">0</div><div class="stat-label">Total Records</div></div></div>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th><th>Time</th><th>Subject</th><th>Status</th>
+                <th>Building</th><th>Floor</th><th>Room</th>
+                <th>Verifications</th>
+              </tr>
+            </thead>
+            <tbody id="historyBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/timetable.js"></script>
+  <script src="js/history.js"></script>
+</body>
+</html>

@@ -12,6 +12,17 @@ const { notFound, errorHandler } = require('./middleware/errorHandler');
 
 // ---- Routes ----
 const authRoutes = require('./routes/auth');
+const buildingRoutes = require('./routes/buildings');
+const floorRoutes = require('./routes/floors');
+const classroomRoutes = require('./routes/classrooms');
+const zoneRoutes = require('./routes/zones');
+const subjectRoutes = require('./routes/subjects');
+const timetableRoutes = require('./routes/timetable');
+const studentRoutes = require('./routes/students');
+const teacherRoutes = require('./routes/teachers');
+const settingsRoutes = require('./routes/settings');
+const qrRoutes = require('./routes/qr');
+const logRoutes = require('./routes/logs');
 
 // ---- Connect database (exits the process if it fails) ----
 connectDB();
@@ -60,6 +71,17 @@ app.use('/api/auth', authLimiter);
 
 // ---- API routes ----
 app.use('/api/auth', authRoutes);
+app.use('/api/buildings', buildingRoutes);
+app.use('/api/floors', floorRoutes);
+app.use('/api/classrooms', classroomRoutes);
+app.use('/api/zones', zoneRoutes);
+app.use('/api/subjects', subjectRoutes);
+app.use('/api/timetable', timetableRoutes);
+app.use('/api/students', studentRoutes);
+app.use('/api/teachers', teacherRoutes);
+app.use('/api/settings', settingsRoutes);
+app.use('/api/qr', qrRoutes);
+app.use('/api/logs', logRoutes);
 
 // ---- Health check ----
 app.get('/api/health', (req, res) => {
@@ -82,7 +104,7 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log('==============================================');
-  console.log('  SMART ATTENDANCE SYSTEM - STAGE 1');
+  console.log('  SMART ATTENDANCE SYSTEM - STAGE 2');
   console.log('  Server running on: http://localhost:' + PORT);
   console.log('  Landing page:     http://localhost:' + PORT + '/');
   console.log('  API health:       http://localhost:' + PORT + '/api/health');

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teacher Dashboard - Smart Attendance</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <nav class="navbar" style="display:none;"></nav>
+
+  <div class="dash">
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+      <div class="s-brand"><span class="brand-icon">&#9672;</span>SmartAttendance</div>
+      <a class="s-link active" href="teacher-dashboard.html">&#9967; Dashboard</a>
+      <a class="s-link" href="timetable.html">&#128197; Timetable</a>
+      <a class="s-link" href="reports.html">&#128202; Reports</a>
+      <a class="s-link" href="student-dashboard.html" style="pointer-events:none;opacity:.45;" title="Student area">&#127891; Mark Attendance (Stage 4)</a>
+      <div class="s-foot">
+        <div class="s-user"><b id="sbName"></b><span id="sbUid"></span></div>
+        <button class="btn btn-danger btn-sm" data-logout>Log out</button>
+      </div>
+    </aside>
+
+    <!-- ================= MAIN ================= -->
+    <main class="dash-main">
+      <header class="page-header">
+        <div>
+          <h1>Teacher Dashboard</h1>
+          <p class="sub">Welcome, <span id="teacherName">-</span></p>
+        </div>
+      </header>
+
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-icon" style="background:var(--primary-light);color:var(--primary);">&#128197;</div><div><div class="stat-value" id="tToday">-</div><div class="stat-label">Today's Classes</div></div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--info-light);color:var(--info);">&#128216;</div><div><div class="stat-value" id="tSubjects">-</div><div class="stat-label">Subjects Taught</div></div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--success-light);color:var(--success);">&#127891;</div><div><div class="stat-value" id="tStudents">-</div><div class="stat-label">Students</div></div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--warning-light);color:var(--warning);">&#128197;</div><div><div class="stat-value" id="tWeek">-</div><div class="stat-label">Weekly Classes</div></div></div>
+      </div>
+
+      <div class="split">
+        <!-- Today's classes -->
+        <div class="card">
+          <div class="card-title">Today's Classes</div>
+          <div id="todayClassesEmpty" class="text-muted text-sm">Loading...</div>
+          <div class="table-wrap">
+            <table id="todayTable" style="display:none;">
+              <thead><tr><th>Time</th><th>Subject</th><th>Section</th><th>Room</th></tr></thead>
+              <tbody id="todayBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Weekly classes summary -->
+        <div class="card">
+          <div class="card-title">This Week's Schedule</div>
+          <div id="weekBody" class="log-line" style="padding:0;"></div>
+        </div>
+      </div>
+
+      <!-- Student roster -->
+      <div class="card">
+        <div class="card-title">
+          Student Roster
+          <div class="toolbar" style="margin:0;">
+            <input type="text" id="searchStudents" class="form-control" placeholder="Search student ID / name / email" />
+            <button class="btn btn-sm" id="searchBtn">Search</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Student ID</th><th>Name</th><th>Department</th><th>Year</th><th>Section</th></tr></thead>
+            <tbody id="rosterBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/teacher.js"></script>
+</body>
+</html>

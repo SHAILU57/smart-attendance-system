@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const { generateQRToken } = require('../utils/qrToken');
+const { writeLog } = require('../services/logService');
 const crypto = require('crypto');
 
 /**
@@ -40,6 +41,14 @@ const register = async (req, res) => {
     qrToken: generateQRToken(),
   });
 
+  await writeLog({
+    action: 'STUDENT_REGISTERED',
+    message: `Student ${user.name} (${user.studentId}) registered`,
+    userId: user._id,
+    targetType: 'User',
+    targetId: user._id,
+  });
+
   res.status(201).json({
     success: true,
     message: 'Registration successful! Your account and QR code are ready.',
@@ -73,6 +82,14 @@ const login = async (req, res) => {
       message: 'Invalid email or password.',
     });
   }
+
+  await writeLog({
+    action: 'USER_LOGIN',
+    message: `${user.name} (${user.role}) logged in`,
+    userId: user._id,
+    targetType: 'User',
+    targetId: user._id,
+  });
 
   res.json({
     success: true,

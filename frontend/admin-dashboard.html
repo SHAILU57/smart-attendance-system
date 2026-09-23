@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - Smart Attendance</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <nav class="navbar" style="display:none;"></nav>
+
+  <div class="dash">
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+      <div class="s-brand"><span class="brand-icon">&#9672;</span>SmartAttendance</div>
+      <a class="s-link" href="#overview" data-tab-link="overview">&#9967; Dashboard</a>
+      <a class="s-link" href="#students" data-tab-link="students">&#127891; Students</a>
+      <a class="s-link" href="#teachers" data-tab-link="teachers">&#128214; Teachers</a>
+      <a class="s-link" href="#buildings" data-tab-link="buildings">&#127959; Buildings</a>
+      <a class="s-link" href="#floors" data-tab-link="floors">&#127963; Floors</a>
+      <a class="s-link" href="#classrooms" data-tab-link="classrooms">&#128716; Classrooms</a>
+      <a class="s-link" href="#zones" data-tab-link="zones">&#128204; Indoor Zones</a>
+      <a class="s-link" href="#subjects" data-tab-link="subjects">&#128218; Subjects</a>
+      <a class="s-link" href="#timetable" data-tab-link="timetable">&#128197; Timetable</a>
+      <a class="s-link" href="reports.html">&#128202; Reports</a>
+      <a class="s-link" href="#settings" data-tab-link="settings">&#9881; System Settings</a>
+      <a class="s-link" href="#logs" data-tab-link="logs">&#128272; Logs</a>
+      <div class="s-foot">
+        <div class="s-user"><b id="sbName"></b><span id="sbUid"></span></div>
+        <button class="btn btn-danger btn-sm" data-logout>Log out</button>
+      </div>
+    </aside>
+
+    <!-- ================= MAIN ================= -->
+    <main class="dash-main">
+      <header class="page-header">
+        <div>
+          <h1>Admin Dashboard</h1>
+          <p class="sub">Manage the whole attendance system.</p>
+        </div>
+      </header>
+
+      <!-- ============ OVERVIEW ============ -->
+      <section class="tab-pane active" id="tab-overview">
+        <div class="stat-grid">
+          <div class="stat-card"><div class="stat-icon" style="background:var(--primary-light);color:var(--primary);">&#127891;</div><div><div class="stat-value" id="ovStudents">-</div><div class="stat-label">Students</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:var(--info-light);color:var(--info);">&#128214;</div><div><div class="stat-value" id="ovTeachers">-</div><div class="stat-label">Teachers</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:var(--success-light);color:var(--success);">&#127959;</div><div><div class="stat-value" id="ovBuildings">-</div><div class="stat-label">Buildings</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:var(--warning-light);color:var(--warning);">&#128716;</div><div><div class="stat-value" id="ovRooms">-</div><div class="stat-label">Classrooms</div></div></div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card"><div class="stat-icon" style="background:var(--accent);color:#fff;">&#128204;</div><div><div class="stat-value" id="ovZones">-</div><div class="stat-label">Indoor Zones</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:var(--danger-light);color:var(--danger);">&#128218;</div><div><div class="stat-value" id="ovSubjects">-</div><div class="stat-label">Subjects</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:var(--info);color:#fff;">&#128197;</div><div><div class="stat-value" id="ovSlots">-</div><div class="stat-label">Timetable Slots</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:#64748b;color:#fff;">&#128272;</div><div><div class="stat-value" id="ovLogs">-</div><div class="stat-label">Log Entries</div></div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">College Geofence (current)</div>
+          <div class="list-kv">
+            <div class="kv"><label>Latitude</label><b id="ovLat">-</b></div>
+            <div class="kv"><label>Longitude</label><b id="ovLng">-</b></div>
+            <div class="kv"><label>Radius</label><b id="ovRadius">-</b></div>
+            <div class="kv"><label>Demo Indoor Mode</label><b id="ovDemo">-</b></div>
+          </div>
+          <button class="btn btn-sm btn-outline mt-16" data-tab-link="settings" data-tab-target="settings">Configure settings</button>
+        </div>
+      </section>
+
+      <!-- ============ STUDENTS ============ -->
+      <section class="tab-pane" id="tab-students">
+        <div class="card-title">Manage Students</div>
+        <div class="toolbar">
+          <input type="text" id="stuSearch" class="form-control" placeholder="Search by ID / name / email" />
+          <button class="btn btn-sm" id="stuSearchBtn">Search</button>
+          <button class="btn btn-sm btn-success" id="stuAddBtn">+ Add Student</button>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Dept</th><th>Year</th><th>Sec</th><th>Status</th><th>Actions</th></tr></thead><tbody id="stuBody"></tbody></table></div>
+      </section>
+
+      <!-- ============ TEACHERS ============ -->
+      <section class="tab-pane" id="tab-teachers">
+        <div class="card-title">Manage Teachers</div>
+        <div class="toolbar">
+          <input type="text" id="tchSearch" class="form-control" placeholder="Search by ID / name / email" />
+          <button class="btn btn-sm" id="tchSearchBtn">Search</button>
+          <button class="btn btn-sm btn-success" id="tchAddBtn">+ Add Teacher</button>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Teacher ID</th><th>Name</th><th>Email</th><th>Dept</th><th>Status</th><th>Actions</th></tr></thead><tbody id="tchBody"></tbody></table></div>
+      </section>
+
+      <!-- ============ BUILDINGS ============ -->
+      <section class="tab-pane" id="tab-buildings">
+        <div class="card-title">Manage Buildings</div>
+        <div class="toolbar"><button class="btn btn-sm btn-success" id="bldAddBtn">+ Add Building</button></div>
+        <div class="table-wrap"><table><thead><tr><th>Code</th><th>Name</th><th>Description</th><th>Status</th><th>Actions</th></tr></thead><tbody id="bldBody"></tbody></table></div>
+      </section>
+
+      <!-- ============ FLOORS ============ -->
+      <section class="tab-pane" id="tab-floors">
+        <div class="card-title">Manage Floors</div>
+        <div class="toolbar"><button class="btn btn-sm btn-success" id="flrAddBtn">+ Add Floor</button></div>
+        <div class="table-wrap"><table><thead><tr><th>Building</th><th>Floor</th><th>Status</th><th>Actions</th></tr></thead><tbody id="flrBody"></tbody></table></div>
+      </section>
+
+      <!-- ============ CLASSROOMS ============ -->
+      <section class="tab-pane" id="tab-classrooms">
+        <div class="card-title">Manage Classrooms</div>
+        <div class="toolbar"><button class="btn btn-sm btn-success" id="clsAddBtn">+ Add Classroom</button></div>
+        <div class="table-wrap"><table><thead><tr><th>Room Code</th><th>Building</th><th>Floor</th><th>Name</th><th>Capacity</th><th>Status</th><th>Actions</th></tr></thead><tbody id="clsBody"></tbody></table></div>
+      </section>
+
+      <!-- ============ ZONES ============ -->
+      <section class="tab-pane" id="tab-zones">
+        <div class="card-title">Manage Indoor Zones (BLE / Wi-Fi mappings)</div>
+        <div class="toolbar"><button class="btn btn-sm btn-success" id="zonAddBtn">+ Add Indoor Zone</button></div>
+        <div class="table-wrap"><table><thead><tr><th>Zone ID</th><th>Building</th><th>Floor</th><th>Room</th><th>Beacon ID</th><th>Wi-Fi SSID</th><th>Status</th><th>Actions</th></tr></thead><tbody id="zonBody"></tbody></table></div>
+      </section>
+
+      <!-- ============ SUBJECTS ============ -->
+      <section class="tab-pane" id="tab-subjects">
+        <div class="card-title">Manage Subjects</div>
+        <div class="toolbar"><button class="btn btn-sm btn-success" id="subAddBtn">+ Add Subject</button></div>
+        <div class="table-wrap"><table><thead><tr><th>Code</th><th>Name</th><th>Dept</th><th>Year</th><th>Credits</th><th>Status</th><th>Actions</th></tr></thead><tbody id="subBody"></tbody></table></div>
+      </section>
+
+      <!-- ============ TIMETABLE ============ -->
+      <section class="tab-pane" id="tab-timetable">
+        <div class="card-title">Manage Timetable</div>
+        <div class="toolbar"><button class="btn btn-sm btn-success" id="ttAddBtn">+ Add Slot</button></div>
+        <div class="table-wrap"><table><thead><tr><th>Day</th><th>Time</th><th>Subject</th><th>Section</th><th>Teacher</th><th>Location</th><th>Status</th><th>Actions</th></tr></thead><tbody id="ttBody"></tbody></table></div>
+      </section>
+
+      <!-- ============ SETTINGS ============ -->
+      <section class="tab-pane" id="tab-settings">
+        <div class="card">
+          <div class="card-title">College GPS &amp; Geofence</div>
+          <p class="text-sm text-muted mb-16">
+            GPS checks whether a student is inside the college campus area only.
+            It does NOT detect exact buildings, floors or rooms.
+          </p>
+          <div class="form-group"><label>College Latitude</label><input type="number" step="any" id="setLat" class="form-control" /></div>
+          <div class="form-group"><label>College Longitude</label><input type="number" step="any" id="setLng" class="form-control" /></div>
+          <div class="form-group"><label>Geofence Radius (meters)</label><input type="number" min="1" max="5000" id="setRadius" class="form-control" /></div>
+
+          <div class="card-title">Verification Policy</div>
+          <div class="form-group">
+            <label><input type="checkbox" id="setRejectOutside" /> Reject attendance if student is OUTSIDE the college geofence</label>
+          </div>
+          <div class="form-group">
+            <label><input type="checkbox" id="setRejectWrong" /> Reject attendance if building/floor/room does not match timetable</label>
+          </div>
+          <div class="form-group">
+            <label><input type="checkbox" id="setDemoIndoor" /> Enable DEMO indoor location mode (test value is not real positioning)</label>
+          </div>
+          <button class="btn" id="saveSettingsBtn">Save Settings</button>
+        </div>
+      </section>
+
+      <!-- ============ LOGS ============ -->
+      <section class="tab-pane" id="tab-logs">
+        <div class="card-title">System Logs</div>
+        <div class="toolbar">
+          <select id="logLevel" class="form-control"><option value="">All levels</option><option>info</option><option>warn</option><option>error</option></select>
+          <input type="text" id="logAction" class="form-control" placeholder="Filter by action (e.g. USER_LOGIN)" />
+          <button class="btn btn-sm" id="logFilterBtn">Apply</button>
+        </div>
+        <div class="card" id="logBox"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ================= MODAL ================= -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Title</h3>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <form id="modalForm" novalidate>
+        <div id="modalFields"></div>
+        <div class="mt-16" style="display:flex;gap:10px;justify-content:flex-end;">
+          <button type="button" class="btn btn-ghost" id="modalCancel">Cancel</button>
+          <button type="submit" class="btn" id="modalSubmit">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

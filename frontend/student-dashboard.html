@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard - Smart Attendance</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <nav class="navbar" style="display:none;"></nav>
+
+  <div class="dash">
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+      <div class="s-brand"><span class="brand-icon">&#9672;</span>SmartAttendance</div>
+      <a class="s-link active" href="student-dashboard.html">&#9967; Dashboard</a>
+      <a class="s-link" href="student-dashboard.html#profile">&#128100; Profile</a>
+      <a class="s-link" href="student-dashboard.html#qr">&#128274; My QR Code</a>
+      <a class="s-link" href="timetable.html">&#128197; Timetable</a>
+      <a class="s-link" href="attendance-history.html">&#128202; Attendance History</a>
+      <div class="s-foot">
+        <div class="s-user"><b id="sbName"></b><span id="sbUid"></span></div>
+        <button class="btn btn-danger btn-sm" data-logout>Log out</button>
+      </div>
+    </aside>
+
+    <!-- ================= MAIN ================= -->
+    <main class="dash-main">
+      <header class="page-header">
+        <div>
+          <h1>Student Dashboard</h1>
+          <p class="sub">Welcome back, <span id="welcomeName">student</span>!</p>
+        </div>
+      </header>
+
+      <!-- Stats -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--primary-light);color:var(--primary);">&#128197;</div>
+          <div><div class="stat-value" id="statToday">-</div><div class="stat-label">Today's Classes</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--success-light);color:var(--success);">&#10004;</div>
+          <div><div class="stat-value" id="statAtt">-</div><div class="stat-label">Attendance %</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--info-light);color:var(--info);">&#128100;</div>
+          <div><div class="stat-value" id="statFace">-</div><div class="stat-label">Face Status</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--warning-light);color:var(--warning);">&#128274;</div>
+          <div><div class="stat-value">1</div><div class="stat-label">My QR Code</div></div>
+        </div>
+      </div>
+
+      <div class="split">
+        <!-- Profile -->
+        <div class="card" id="profile">
+          <div class="card-title">My Profile</div>
+          <div class="profile-grid">
+            <div class="avatar" id="profileAvatar">?</div>
+            <div>
+              <h3 style="font-weight:800;" id="profileName">-</h3>
+              <p class="text-muted text-sm" id="profileUid">-</p>
+            </div>
+          </div>
+          <div class="mt-16 list-kv">
+            <div class="kv"><label>Student ID</label><b id="pvStudentId">-</b></div>
+            <div class="kv"><label>Email</label><b id="pvEmail">-</b></div>
+            <div class="kv"><label>Phone</label><b id="pvPhone">-</b></div>
+            <div class="kv"><label>Department</label><b id="pvDept">-</b></div>
+            <div class="kv"><label>Year</label><b id="pvYear">-</b></div>
+            <div class="kv"><label>Section</label><b id="pvSection">-</b></div>
+            <div class="kv"><label>Face</label><b id="pvFace">-</b></div>
+            <div class="kv"><label>Attendance</label><b id="pvAtt">-</b></div>
+          </div>
+        </div>
+
+        <!-- QR -->
+        <div class="card" id="qr">
+          <div class="card-title">My QR Code</div>
+          <div class="qr-box" id="qrBox"><span class="text-muted text-sm">Loading...</span></div>
+          <p class="text-sm text-muted center">
+            Scan this at the class. It contains only a private token,
+            no passwords or personal data.
+          </p>
+        </div>
+      </div>
+
+      <!-- Today's classes -->
+      <div class="card" id="today">
+        <div class="card-title">Currently Scheduled for Today</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Time</th><th>Subject</th><th>Teacher</th><th>Location</th><th>Room</th></tr>
+            </thead>
+            <tbody id="todayBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/student.js"></script>
+</body>
+</html>

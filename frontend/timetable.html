@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timetable - Smart Attendance</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <nav class="navbar" style="display:none;"></nav>
+
+  <div class="dash">
+    <aside class="sidebar" id="studentSidebar"></aside>
+
+    <main class="dash-main">
+      <header class="page-header">
+        <div>
+          <h1>Timetable</h1>
+          <p class="sub" id="ttDay"></p>
+        </div>
+        <a href="student-dashboard.html" class="btn btn-ghost">&larr; Back to dashboard</a>
+      </header>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Day</th><th>Time</th><th>Subject</th>
+                <th>Teacher</th><th>Building</th><th>Floor</th><th>Room</th>
+              </tr>
+            </thead>
+            <tbody id="ttBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/timetable.js"></script>
+</body>
+</html>
