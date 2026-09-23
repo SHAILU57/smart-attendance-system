@@ -17,7 +17,7 @@
       <a class="s-link active" href="teacher-dashboard.html">&#9967; Dashboard</a>
       <a class="s-link" href="timetable.html">&#128197; Timetable</a>
       <a class="s-link" href="reports.html">&#128202; Reports</a>
-      <a class="s-link" href="student-dashboard.html" style="pointer-events:none;opacity:.45;" title="Student area">&#127891; Mark Attendance (Stage 4)</a>
+      <a class="s-link" href="teacher-dashboard.html#sessions">&#128196; Attendance Sessions</a>
       <div class="s-foot">
         <div class="s-user"><b id="sbName"></b><span id="sbUid"></span></div>
         <button class="btn btn-danger btn-sm" data-logout>Log out</button>
@@ -58,6 +58,52 @@
           <div class="card-title">This Week's Schedule</div>
           <div id="weekBody" class="log-line" style="padding:0;"></div>
         </div>
+      </div>
+
+      <!-- Attendance sessions -->
+      <div class="card" id="sessions" style="margin-top:20px;">
+        <div class="card-title">Attendance Sessions
+          <span class="badge badge-primary" id="sessionCount">0</span>
+        </div>
+        <details>
+          <summary>+ Open a new attendance session</summary>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:12px;">
+            <div class="form-group">
+              <label>Subject</label>
+              <select id="sessSubject"></select>
+            </div>
+            <div class="form-group">
+              <label>Classroom</label>
+              <select id="sessRoom"></select>
+            </div>
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" id="sessDate" />
+            </div>
+            <div class="form-group">
+              <label>Start</label>
+              <input type="time" id="sessStart" value="10:00" />
+            </div>
+            <div class="form-group">
+              <label>End</label>
+              <input type="time" id="sessEnd" value="11:00" />
+            </div>
+            <div style="align-self:end;">
+              <button class="btn btn-success" id="sessCreate">Open session</button>
+            </div>
+          </div>
+          <p class="text-sm text-muted" style="margin-top:8px;">
+            Students can check in only while the session is open (between start and end time).
+            Give them the session code.
+          </p>
+        </details>
+        <div class="table-wrap" style="margin-top:12px;">
+          <table>
+            <thead><tr><th>Code</th><th>Subject</th><th>Date</th><th>Time</th><th>Room</th><th>Status</th><th>Marked</th><th></th></tr></thead>
+            <tbody id="sessionBody"></tbody>
+          </table>
+        </div>
+        <div id="sessionRecords" style="margin-top:12px;"></div>
       </div>
 
       <!-- Student roster -->

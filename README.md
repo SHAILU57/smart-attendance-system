@@ -17,8 +17,8 @@ SmartAttendance/
 │   ├── config/db.js         # MongoDB connection
 │   ├── controllers/         # Route handlers / business logic
 │   ├── middleware/          # Auth, validation, error handling
-│   ├── models/              # Mongoose schemas (incl. FaceTemplate)
-│   ├── routes/              # Express routers (incl. face, location, qr)
+│   ├── models/              # Mongoose schemas (incl. FaceTemplate, AttendanceSession, AttendanceRecord)
+│   ├── routes/              # Express routers (incl. face, location, qr, attendance)
 │   ├── services/            # QR, face, location services
 │   ├── public/models/       # face-api.js model weights (offline ready)
 │   └── utils/               # QR token generator, Haversine, face similarity
@@ -31,6 +31,7 @@ SmartAttendance/
 │   ├── face-verify.html     # Verify live face vs template
 │   ├── location-check.html  # GPS geofence + indoor location checks
 │   ├── student-dashboard.html / teacher-dashboard.html / admin-dashboard.html
+│   ├── attendance.html      # Full check-in: QR→Face→GPS→Indoor→Timetable
 │   ├── timetable.html / attendance-history.html / reports.html
 │   ├── css/style.css
 │   └── js/ (api.js, auth.js, main.js, student.js, teacher.js, admin.js,
@@ -200,6 +201,36 @@ Content-Type: application/json
 ### Stage 3 demo/sample data
 
 Seeded zones (`npm run seed`): `ZONE_A204` (Block A / Floor 2 / room **A204**, beacon `BEACON_A2`, Wi-Fi `COL-WIFI-A2`), plus others — see the seed file.
+
+## What's in Stage 4 (the full attendance pipeline)
+
+- **Attendance Session** — a teacher/admin opens a session for a class (subject + classroom + date + time window). Students can check in only while it is open. Sessions appear at teacher dashboard → *Attendance Sessions* (create, list, live status, per-student records).
+- **`attendance.html`** — a step-by-step wizard: pick the live session → provide evidence, step by step, in any order:
+  1. **QR** — scan your QR with the camera (jsQR) or paste the token
+  2. **Face** — capture a live embedding (same privacy rules: no photo, only server-side distance)
+  3. **GPS** — your device coordinates
+  4. **Indoor** — Beacon ID / Wi-Fi SSID, or a Demo zone (clearly flagged)
+  5. **Timetable** — verified automatically by the server
+- **`POST /api/attendance/checkin`** runs the whole chain server-side and records `PRESENT` only when **all** checks pass (`qr + face + gps + indoor + timetable`). Otherwise it records `REJECTED` with the exact reason, e.g. `wrong classroom: timetable expects A204, you are in B105` or `gps: outside campus geofence` or `face: no match (distance …)`.
+- **Duplicate protection** — one record per student per session (a second attempt returns `alreadyMarked`).
+- **History & percentages**
+  - `GET /api/attendance/student/me` — your records (Attendance History page).
+  - `GET /api/attendance/summary/me` — overall % + per-subject % shown on the student dashboard.
+  - `GET /api/attendance/session/:id` — teacher/admin sees who is PRESENT / REJECTED per session.
+- Seeded open sessions so you can demo any day: **LIVE1** (CSE – Computer Networks @ A204) and **LIVE2** (ECE – Digital Electronics @ B105), plus an all-day demo timetable slot for today.
+
+### Stage 4 test table
+
+| Test | How | Expected |
+|------|-----|----------|
+| Open session | Teacher dashboard → attendance sessions → create (subject, classroom, date, time) | Session listed; students get the code |
+| Happy path | Student → Mark Attendance → LIVE1 → QR+Face+GPS+Indoor(zone `ZONE_A204`) → submit | **PRESENT**, all 5 checks OK |
+| Wrong room | Same, but indoor `ZONE_B105` | **REJECTED**: wrong classroom (expects A204) |
+| GPS outside | Same but mock a GPS far away | **REJECTED**: outside campus geofence |
+| Wrong face | Use a different captured face | **REJECTED**: face no match |
+| Duplicate | Check in twice | Second attempt: "already recorded: PRESENT" |
+| Dashboard % | After check-ins, reopen student dashboard | Attendance % + per-subject % updated |
+| Records | Teacher dashboard → session → View records | PRESENT/REJECTED list with reasons |
 
 ## Coming in the next stages
 

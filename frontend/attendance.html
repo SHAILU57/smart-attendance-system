@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mark Attendance | Smart Attendance</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="student-dashboard.html" class="brand">&#128196; Smart Attendance</a>
+      <nav class="nav-links" id="navLinks">
+        <a href="student-dashboard.html">Dashboard</a>
+        <a href="student-dashboard.html" data-logout>Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container page">
+    <aside class="sidebar" id="studentSidebar"></aside>
+
+    <section class="content panel">
+      <h2>Mark Attendance</h2>
+      <p class="muted">
+        Attendance is recorded only when <b>all five checks</b> pass.
+        Your QR + your face prove <b>who you are</b>; GPS proves you are on
+        <b>campus</b>; indoor positioning proves the <b>exact building / floor / room</b>;
+        and the timetable proves that is the <b>correct classroom right now</b>.
+      </p>
+
+      <div id="sessionPicker" class="card">
+        <div class="card-title">1. Choose your live session</div>
+        <div id="sessionList"></div>
+      </div>
+
+      <div id="wizard" style="display:none;">
+        <div class="card" style="margin-top:16px;">
+          <div class="card-title">2. Verification steps</div>
+          <div class="verify-steps" id="steps">
+            <div class="verify-step" id="st-qr">
+              <div class="st-ico">&#128274;</div>
+              <div><div class="st-name">QR code</div><div class="text-sm text-muted">Your unique QR token</div></div>
+              <span class="st-state" id="st-qr-state">Pending</span>
+            </div>
+            <div class="verify-step" id="st-face">
+              <div class="st-ico">&#128100;</div>
+              <div><div class="st-name">Face verification</div><div class="text-sm text-muted">Embedding distance vs your template</div></div>
+              <span class="st-state" id="st-face-state">Pending</span>
+            </div>
+            <div class="verify-step" id="st-gps">
+              <div class="st-ico">&#128506;</div>
+              <div><div class="st-name">GPS campus check</div><div class="text-sm text-muted">Are you inside the geofence?</div></div>
+              <span class="st-state" id="st-gps-state">Pending</span>
+            </div>
+            <div class="verify-step" id="st-indoor">
+              <div class="st-ico">&#128204;</div>
+              <div><div class="st-name">Indoor location</div><div class="text-sm text-muted">Building / floor / room</div></div>
+              <span class="st-state" id="st-indoor-state">Pending</span>
+            </div>
+            <div class="verify-step" id="st-tt">
+              <div class="st-ico">&#128197;</div>
+              <div><div class="st-name">Timetable match</div><div class="text-sm text-muted">Correct class in the correct room now</div></div>
+              <span class="st-state" id="st-tt-state">Pending</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px;">
+          <div class="card-title">3. Provide the evidence</div>
+
+          <div id="qrStep" style="margin-bottom:16px;">
+            <details>
+              <summary>Scan your QR with the camera (or paste the token)</summary>
+              <button class="btn btn-sm" id="qrCamBtn" style="margin:10px 0;">&#128248; Start QR camera</button>
+              <div class="cam-wrap" id="qrCamWrap" style="display:none;">
+                <video id="qrVideo" playsinline muted></video>
+                <canvas id="overlay" style="display:none;"></canvas>
+                <div class="cam-frame"></div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
+                <div class="form-group" style="flex:1;min-width:240px;">
+                  <label>Or paste your QR token</label>
+                  <input type="text" id="qrTokenInput" class="mono-in" placeholder="If you scanned above, this is auto-filled" />
+                </div>
+              </div>
+            </details>
+            <div id="qrInfo" class="text-sm text-muted" style="margin-top:8px;">
+              Tip: find your QR in "My QR Code" on the dashboard and scan it with this camera.
+            </div>
+          </div>
+
+          <div id="faceStep" style="margin-bottom:16px;">
+            <details>
+              <summary>Face verification</summary>
+              <p class="text-sm text-muted">Uses your camera; only the numeric embedding is sent - no photo stored.</p>
+              <div class="cam-wrap" style="margin-top:8px;">
+                <div class="cam-loading" id="faceCamLoading">Models loading&hellip;</div>
+                <video id="faceVideo" playsinline muted></video>
+                <canvas id="faceOverlay"></canvas>
+              </div>
+              <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;">
+                <button class="btn btn-sm" id="faceCamBtn">&#128248; Start camera</button>
+                <button class="btn btn-sm btn-success" id="faceCaptureBtn" disabled>&#128269; Capture my face</button>
+              </div>
+            </details>
+          </div>
+
+          <div id="gpsStep" style="margin-bottom:16px;">
+            <details open>
+              <summary>GPS location (auto)</summary>
+              <button class="btn btn-sm" id="gpsBtn">&#128506; Detect my GPS location</button>
+              <span class="muted text-sm" id="gpsStatus"></span>
+              <div id="gpsInfo" class="text-sm text-muted" style="margin-top:6px;"></div>
+            </details>
+          </div>
+
+          <div id="indoorStep" style="margin-bottom:16px;">
+            <details>
+              <summary>Indoor location (building / floor / room)</summary>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-top:8px;">
+                <div class="form-group" style="flex:1;min-width:160px;">
+                  <label>Beacon ID</label>
+                  <input type="text" id="beaconId" class="mono-in" placeholder="BEACON_A2" />
+                </div>
+                <div class="form-group" style="flex:1;min-width:160px;">
+                  <label>Or Wi-Fi SSID</label>
+                  <input type="text" id="wifiSsid" class="mono-in" placeholder="COL-WIFI-A2" />
+                </div>
+                <button class="btn btn-sm btn-success" id="indoorBtn">&#10003; Verify indoor</button>
+              </div>
+              <div id="indoorInfo" class="text-sm text-muted" style="margin-top:6px;"></div>
+              <div id="demoBlock" style="margin-top:10px;"></div>
+            </details>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px;">
+          <div class="card-title">4. Submit</div>
+          <button class="btn btn-lg btn-success" id="submitBtn">&#10003; Record my attendance</button>
+          <div id="resultArea" style="margin-top:14px;"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/student-nav.js"></script>
+  <script src="js/face-camera.js"></script>
+  <script src="js/attendance.js"></script>
+</body>
+</html>

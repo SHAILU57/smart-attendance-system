@@ -18,6 +18,8 @@ const Subject = require('./models/Subject');
 const Timetable = require('./models/Timetable');
 const SystemSetting = require('./models/SystemSetting');
 const SystemLog = require('./models/SystemLog');
+const AttendanceSession = require('./models/AttendanceSession');
+const AttendanceRecord = require('./models/AttendanceRecord');
 const connectDB = require('./config/db');
 const { generateQRToken } = require('./utils/qrToken');
 
@@ -41,6 +43,8 @@ async function seed() {
   await Timetable.deleteMany({});
   await SystemSetting.deleteMany({});
   await SystemLog.deleteMany({});
+  await AttendanceSession.deleteMany({});
+  await AttendanceRecord.deleteMany({});
 
   console.log('=== Creating admin & teacher ===');
 
@@ -240,9 +244,63 @@ async function seed() {
     geofenceRadius: 150,
     rejectOutsideGeoFence: true,
     rejectWrongLocation: true,
-    demoIndoorMode: false,
+    demoIndoorMode: true,
     updatedBy: admin._id,
   });
+
+  console.log('=== Creating attendance sessions (demo) ===');
+
+  // Add an all-day demo class for TODAY's weekday so the full pipeline
+  // (QR -> Face -> GPS -> Indoor -> Timetable) can be tested any day/time.
+  const today = new Date();
+  const dayName = today.toLocaleDateString('en-US', { weekday: 'long' });
+  const localDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+  await Timetable.create([
+    {
+      department: 'CSE', year: '3rd Year', section: 'A',
+      subject: subjects[0]._id, teacher: teacher1._id,
+      day: dayName, startTime: '00:00', endTime: '23:59',
+      building: blockA._id, floor: aF2._id, room: cA204._id,
+    },
+    {
+      department: 'ECE', year: '3rd Year', section: 'A',
+      subject: subjects[3]._id, teacher: teacher2._id,
+      day: dayName, startTime: '00:00', endTime: '23:59',
+      building: blockB._id, floor: bF1._id, room: cB105._id,
+    },
+  ]);
+
+  await AttendanceSession.create([
+    {
+      code: 'LIVE1',
+      subject: subjects[0]._id,
+      teacher: teacher1._id,
+      department: 'CSE',
+      date: localDate,
+      startTime: '00:00',
+      endTime: '23:59',
+      building: blockA._id,
+      floor: aF2._id,
+      room: cA204._id,
+      status: 'ONGOING',
+      createdBy: admin._id,
+    },
+    {
+      code: 'LIVE2',
+      subject: subjects[3]._id,
+      teacher: teacher2._id,
+      department: 'ECE',
+      date: localDate,
+      startTime: '00:00',
+      endTime: '23:59',
+      building: blockB._id,
+      floor: bF1._id,
+      room: cB105._id,
+      status: 'ONGOING',
+      createdBy: admin._id,
+    },
+  ]);
 
   console.log('=== Writing startup log ===');
 
@@ -265,6 +323,8 @@ async function seed() {
   console.log('         stu2@college.edu / demo123        (STU002, CSE 3-A)');
   console.log('         stu3@college.edu / demo123        (STU003, ECE 3-A)');
   console.log('         stu4@college.edu / demo123        (STU004, CSE 3-A)');
+  console.log('OPEN SESSION -> code LIVE1 (CSE: ComputerNetworks @ A204),');
+  console.log('                code LIVE2 (ECE: DigitalElectronics @ B105)');
   console.log('============================================');
 
   process.exit(0);

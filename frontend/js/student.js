@@ -52,8 +52,25 @@ async function initStudent() {
   // Load today's classes
   await loadTodayClasses(user);
 
+  // Load attendance summary (%)
+  await loadSummary();
+
   // Load QR code
   await loadQR();
+}
+
+async function loadSummary() {
+  try {
+    const data = await API.get('/api/attendance/summary/me');
+    const o = data.overall;
+    document.getElementById('statAtt').textContent = o.total ? o.pct + '%' : '-';
+    document.getElementById('pvAtt').textContent = o.total
+      ? `${o.present}/${o.total} present (${o.pct}%) - ${o.rejected} rejected`
+      : 'No records yet. Mark attendance to see your percentage.';
+  } catch (err) {
+    document.getElementById('statAtt').textContent = '-';
+    document.getElementById('pvAtt').textContent = 'No records yet';
+  }
 }
 
 function set(id, value) {

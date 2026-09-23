@@ -10,6 +10,7 @@ function buildStudentSidebar(activePage) {
 
   const links = [
     ['student-dashboard.html', '&#9967;', 'Dashboard'],
+    ['attendance.html', '&#128196;', 'Mark Attendance'],
     ['student-dashboard.html#qr', '&#128274;', 'My QR Code'],
     ['qr-scanner.html', '&#128247;', 'QR Scanner'],
     ['face-register.html', '&#128100;', 'Register Face'],
