@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register Face | Smart Attendance</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="student-dashboard.html" class="brand">&#128100; Smart Attendance</a>
+      <nav class="nav-links" id="navLinks">
+        <a href="student-dashboard.html">Dashboard</a>
+        <a href="student-dashboard.html" data-logout>Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container page">
+    <aside class="sidebar" id="studentSidebar"></aside>
+
+    <section class="content panel">
+      <h2>Register Your Face</h2>
+      <p class="muted">
+        This stores a numeric <b>face template (embedding)</b> — a mathematical descriptor —
+        <b>not a photo</b>. The camera is used only at the moment you capture your face, and no
+        image is saved on the server. This step is needed so face verification can work later.
+      </p>
+
+      <div class="result-banner warn" id="explainBanner">
+        &#128274; <b>What is stored?</b> Only a 128-number mathematical embedding. No photos are
+        kept. What the camera sees is used on-the-fly for the comparison and then discarded.
+      </div>
+
+      <div class="cam-wrap">
+        <div class="cam-loading" id="camLoading">Face models loading&hellip;</div>
+        <video id="faceVideo" playsinline muted></video>
+        <canvas id="overlay"></canvas>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px;">
+        <button class="btn" id="startBtn">&#128248; Start camera</button>
+        <button class="btn btn-success" id="captureBtn" disabled>&#10024; Capture &amp; save my face</button>
+        <button class="btn btn-ghost" id="stopBtn">Turn off camera</button>
+        <span class="muted" id="camStatus">Models not loaded yet.</span>
+      </div>
+
+      <div id="resultArea"></div>
+
+      <div class="card" style="margin-top:18px;">
+        <div class="card-title">Why "Face Template" and not a photo?</div>
+        <p class="text-md text-muted">
+          Face <b>recognition</b> compares a live capture against a stored template using distance
+          between embeddings. If it were only <b>detection</b>, the system would just notice "a face
+          is present" — that cannot prove who the person is. Recognition (embedding comparison) is a
+          statistical match, not 100% accurate, which is why attendance also verifies location and
+          timetable before marking present (full pipeline arrives in Stage 4).
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/student-nav.js"></script>
+  <script src="js/face-camera.js"></script>
+  <script src="js/face-register.js"></script>
+</body>
+</html>

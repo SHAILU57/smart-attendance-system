@@ -1,4 +1,5 @@
 const QRCode = require('qrcode');
+const User = require('../models/User');
 const { writeLog } = require('../services/logService');
 
 /**
@@ -37,4 +38,76 @@ const generateQR = async (req, res) => {
   });
 };
 
-module.exports = { generateQR };
+/**
+ * POST /api/qr/verify  (any authenticated user with a QR scan)
+ * Body: { token } OR { payload } (the text read/decoded from a scanned QR).
+ *
+ * Looks up the student by their private QR token.
+ * Rejects invalid, tampered and unknown tokens.
+ */
+const verifyQR = async (req, res) => {
+  const raw = req.body.token || req.body.payload || req.body.qrData;
+  if (!raw || typeof raw !== 'string') {
+    return res.status(400).json({
+      success: false,
+      message: 'QR payload is required.',
+    });
+  }
+
+  // Decoding: our own QRs store JSON {"t":"SAT...","v":1}.
+  // Also accept scanning the raw token directly.
+  let token = raw.trim();
+  try {
+    const parsed = JSON.parse(token);
+    if (parsed && parsed.t) token = parsed.t;
+  } catch (err) {
+    // not JSON - treat the whole string as the token
+  }
+
+  const student = await User.findOne({ qrToken: token, role: 'student' });
+
+  if (!student) {
+    await writeLog({
+      level: 'warn',
+      action: 'QR_REJECTED',
+      message: `QR verification rejected (unknown/tampered token starting with "${token.slice(0, 8)}...")`,
+      userId: req.user ? req.user._id : null,
+    });
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid QR code. The token is not recognised.',
+    });
+  }
+
+  if (!student.isActive) {
+    return res.status(403).json({
+      success: false,
+      message: 'This student account is deactivated.',
+    });
+  }
+
+  await writeLog({
+    action: 'QR_VERIFIED',
+    message: `QR verified for student ${student.name} (${student.studentId})`,
+    userId: req.user ? req.user._id : student._id,
+    targetType: 'User',
+    targetId: student._id,
+  });
+
+  res.json({
+    success: true,
+    message: 'QR verified. Student identified.',
+    student: {
+      _id: student._id,
+      studentId: student.studentId,
+      name: student.name,
+      department: student.department,
+      year: student.year,
+      section: student.section,
+      faceRegistered: student.faceRegistered,
+      hasQr: !!student.qrToken,
+    },
+  });
+};
+
+module.exports = { generateQR, verifyQR };

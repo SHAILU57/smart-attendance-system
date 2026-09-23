@@ -592,3 +592,33 @@ tbody tr:hover { background: #f8fafc; }
 .log-line { font-size: .85rem; padding: 8px 0; border-bottom: 1px dashed var(--border); }
 .log-line b { color: var(--text); }
 
+
+
+/* ---------------- Camera / scanning ---------------- */
+.cam-wrap { position: relative; border-radius: 14px; overflow: hidden; background: #0f172a; max-width: 560px; margin: 0 auto; }
+.cam-wrap video { width: 100%; display: block; }
+#overlay { position: absolute; inset: 0; pointer-events: none; }
+.cam-frame { position: absolute; width: 62%; height: 72%; left: 19%; top: 14%; border: 3px solid rgba(79,70,229,.85); border-radius: 12px; box-shadow: 0 0 0 9999px rgba(15,23,42,.45); }
+.cam-loading { position: absolute; inset: 0; display: grid; place-items: center; color: #cbd5e1; font-weight: 600; }
+.result-banner { border-radius: 12px; padding: 16px 18px; font-weight: 600; margin-top: 16px; }
+.result-banner.ok { background: var(--success-light); color: var(--success); }
+.result-banner.bad { background: var(--danger-light); color: var(--danger); }
+.result-banner.warn { background: var(--warning-light); color: var(--warning); }
+.verify-steps { display: flex; flex-direction: column; gap: 12px; }
+.verify-step { display:flex; align-items:center; gap:12px; background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:12px 14px; }
+.verify-step .st-ico { width:34px; height:34px; border-radius:9px; display:grid; place-items:center; font-size:1rem; background: var(--primary-light); color: var(--primary); flex-shrink:0; }
+.verify-step .st-name { font-weight:700; font-size:.92rem; }
+.verify-step .st-state { margin-left:auto; font-size:.92rem; font-weight:700; color: var(--text-muted); white-space:nowrap; }
+.verify-step.done .st-ico { background: var(--success-light); color: var(--success); }
+.verify-step.fail .st-ico { background: var(--danger-light); color: var(--danger); }
+.demo-flag { background: repeating-linear-gradient(45deg, #fef3c7, #fef3c7 10px, #fde68a 10px, #fde68a 20px); color:#92400e; font-weight:800; border-radius:8px; padding:8px 12px; font-size:.85rem; margin-bottom:12px; }
+.mono-in { font-family: ui-monospace, 'Cascadia Code', Consolas, monospace; font-size: .88rem; }
+
+
+
+/* ---------------- Location check ---------------- */
+.indoor-panel { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-top: 10px; }
+.indoor-panel + .indoor-panel { margin-top: 6px; }
+.btn-warning { background: var(--warning); color: #fff; }
+.btn-warning:hover { filter: brightness(.95); }
+

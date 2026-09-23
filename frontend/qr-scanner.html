@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Scanner | Smart Attendance</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="student-dashboard.html" class="brand">&#128274; Smart Attendance</a>
+      <nav class="nav-links" id="navLinks">
+        <a href="student-dashboard.html" data-logout>Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container page">
+    <aside class="sidebar" id="studentSidebar"></aside>
+    <section class="content panel">
+      <h2>QR Attendance Scanner</h2>
+      <p class="muted">Scan a student's QR code using the camera. The QR contains only a private
+        identifier token — no personal data is embedded inside the QR.</p>
+
+      <div class="cam-wrap">
+        <div class="cam-loading" id="camLoading">Starting camera&hellip;</div>
+        <video id="qrVideo" playsinline muted></video>
+        <canvas id="overlay"></canvas>
+        <div class="cam-frame" id="camFrame"></div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px;">
+        <button class="btn" id="startBtn">&#128248; Start scanning</button>
+        <button class="btn btn-ghost" id="stopBtn">Stop</button>
+        <span class="muted" id="scanStatus">Camera is off</span>
+      </div>
+
+      <details style="margin-top:18px;">
+        <summary>Cannot use the camera? Enter the QR token manually</summary>
+        <div style="display:flex;gap:10px;align-items:flex-end;margin-top:10px;flex-wrap:wrap;">
+          <div class="form-group" style="flex:1;min-width:240px;">
+            <label>QR token</label>
+            <input type="text" id="manualToken" class="mono-in" placeholder="Paste scanned QR text here" />
+          </div>
+          <button class="btn btn-success" id="manualVerify">Verify manually</button>
+        </div>
+      </details>
+
+      <div id="resultArea"></div>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/student-nav.js"></script>
+  <script src="js/qr-scanner.js"></script>
+</body>
+</html>

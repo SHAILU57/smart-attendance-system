@@ -23,6 +23,8 @@ const teacherRoutes = require('./routes/teachers');
 const settingsRoutes = require('./routes/settings');
 const qrRoutes = require('./routes/qr');
 const logRoutes = require('./routes/logs');
+const faceRoutes = require('./routes/face');
+const locationRoutes = require('./routes/location');
 
 // ---- Connect database (exits the process if it fails) ----
 connectDB();
@@ -82,6 +84,8 @@ app.use('/api/teachers', teacherRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/qr', qrRoutes);
 app.use('/api/logs', logRoutes);
+app.use('/api/face', faceRoutes);
+app.use('/api/location', locationRoutes);
 
 // ---- Health check ----
 app.get('/api/health', (req, res) => {
@@ -95,6 +99,19 @@ app.get('/api/health', (req, res) => {
 // ---- Serve frontend static files (in production / local dev) ----
 const frontendDir = path.join(__dirname, '..', 'frontend');
 app.use(express.static(frontendDir));
+
+// ---- Vendor libraries (QR scanning + face recognition) ----
+app.use(
+  '/vendor/jsqr',
+  express.static(path.join(__dirname, 'node_modules', 'jsqr', 'dist'))
+);
+app.use(
+  '/vendor/face-api',
+  express.static(path.join(__dirname, 'node_modules', 'face-api.js', 'dist'))
+);
+
+// ---- Face recognition model weights (downloaded, offline ready) ----
+app.use('/models/face-api', express.static(path.join(__dirname, 'public', 'models', 'face-api')));
 
 // ---- 404 + error handler ----
 app.use(notFound);

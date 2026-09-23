@@ -121,7 +121,7 @@ function buildNav(activeLabel) {
 
   // if a page needs authentication, protect it
   const protectedPages = ['student-dashboard', 'teacher-dashboard', 'admin-dashboard',
-    'attendance', 'qr-scanner', 'face-register', 'face-verify', 'timetable',
+    'attendance', 'qr-scanner', 'face-register', 'face-verify', 'location-check', 'timetable',
     'attendance-history', 'reports'];
   const current = (window.location.pathname.split('/').pop() || 'index.html').replace('.html', '');
   if (protectedPages.includes(current) && !isLogged) {

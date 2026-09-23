@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify Face | Smart Attendance</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="student-dashboard.html" class="brand">&#128065; Smart Attendance</a>
+      <nav class="nav-links" id="navLinks">
+        <a href="student-dashboard.html">Dashboard</a>
+        <a href="student-dashboard.html" data-logout>Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container page">
+    <aside class="sidebar" id="studentSidebar"></aside>
+
+    <section class="content panel">
+      <h2>Verify Your Face</h2>
+      <p class="muted">
+        Compare a live capture against your registered face template on the server.
+        The match uses Euclidean distance between 128-dimension embeddings —
+        a statistical comparison, not an absolute guarantee.
+      </p>
+
+      <div class="cam-wrap">
+        <div class="cam-loading" id="camLoading">Models loading&hellip;</div>
+        <video id="faceVideo" playsinline muted></video>
+        <canvas id="overlay"></canvas>
+        <div class="cam-frame" id="camFrame"></div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px;">
+        <button class="btn" id="startBtn">&#128248; Start camera</button>
+        <button class="btn btn-success" id="verifyBtn" disabled>&#128269; Verify my face</button>
+        <button class="btn btn-ghost" id="stopBtn">Turn off camera</button>
+        <span class="muted" id="camStatus">Models not loaded yet.</span>
+      </div>
+
+      <div id="resultArea"></div>
+
+      <div class="card" style="margin-top:18px;">
+        <div class="card-title">How the match works</div>
+        <ol class="text-md text-muted" style="padding-left:20px;line-height:1.7;">
+          <li>Your browser detects your face and reads a 128-number embedding.</li>
+          <li>Only that embedding is sent — no photo leaves your device.</li>
+          <li>The server compares it to your stored template using Euclidean distance
+            (lower = closer). Face distance below ~0.55 = match.</li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/student-nav.js"></script>
+  <script src="js/face-camera.js"></script>
+  <script src="js/face-verify.js"></script>
+</body>
+</html>

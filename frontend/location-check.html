@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Location Check | Smart Attendance</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="student-dashboard.html" class="brand">&#128205; Smart Attendance</a>
+      <nav class="nav-links" id="navLinks">
+        <a href="student-dashboard.html">Dashboard</a>
+        <a href="student-dashboard.html" data-logout>Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container page">
+    <aside class="sidebar" id="studentSidebar"></aside>
+
+    <section class="content">
+      <h2>Location Check</h2>
+      <p class="muted">
+        Two different checks are used and they mean different things:
+      </p>
+
+      <div class="card">
+        <div class="card-title">&#128506; GPS Campus Check</div>
+        <p class="text-md text-muted">
+          Uses your device GPS to confirm you are inside the college campus geofence.
+          <b>GPS cannot tell your exact building, floor or room</b> — it only verifies the campus area.
+        </p>
+        <button class="btn" id="gpsBtn">&#128506; Check my GPS location</button>
+        <span class="muted" id="gpsStatus" style="margin-left:8px;"></span>
+        <div id="gpsResult"></div>
+      </div>
+
+      <div class="card" style="margin-top:16px;">
+        <div class="card-title">&#128204; Indoor Position Check (Building / Floor / Room)</div>
+        <p class="text-md text-muted">
+          Indoor positioning identifies the exact building, floor and room using Wi-Fi/BLE identifiers
+          or Web Bluetooth. There are three clearly labelled modes:
+        </p>
+
+        <div id="configInfo" class="text-sm text-muted" style="margin-bottom:10px;"></div>
+
+        <div class="verify-steps" id="indoorModeTabs">
+          <div class="verify-step" data-mode="manual">
+            <div class="st-ico">&#127760;</div>
+            <div>
+              <div class="st-name">Real - Authorized Wi-Fi/BLE identifier</div>
+              <div class="text-sm text-muted">Enter the exact Beacon ID or Wi-Fi SSID observed in the room.</div>
+            </div>
+            <span class="st-state" id="modeManualState">Manual</span>
+          </div>
+          <div class="verify-step" data-mode="ble">
+            <div class="st-ico">&#128225;</div>
+            <div>
+              <div class="st-name">Real - Web Bluetooth scan</div>
+              <div class="text-sm text-muted">Scans for nearby beacons (supported on Chrome on Android/macOS).</div>
+            </div>
+            <span class="st-state" id="modeBleState">BLE</span>
+          </div>
+          <div class="verify-step" data-mode="demo" id="demoModeRow">
+            <div class="st-ico">&#128736;</div>
+            <div>
+              <div class="st-name">DEMO mode (NOT real positioning)</div>
+              <div class="text-sm text-muted">Pick a test zone. Results are fake / illustrative only.</div>
+            </div>
+            <span class="st-state" id="modeDemoState">Demo</span>
+          </div>
+        </div>
+
+        <div id="manualPanel" class="indoor-panel">
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
+            <div class="form-group" style="flex:1;min-width:180px;">
+              <label>Beacon ID (e.g. BEACON_A2)</label>
+              <input type="text" id="beaconId" class="mono-in" placeholder="BEACON_A2" />
+            </div>
+            <div class="form-group" style="flex:1;min-width:180px;">
+              <label>Or Wi-Fi SSID (e.g. COL-WIFI-A2)</label>
+              <input type="text" id="wifiSsid" class="mono-in" placeholder="COL-WIFI-A2" />
+            </div>
+            <button class="btn btn-success" id="manualMatchBtn">&#10003; Verify indoor location</button>
+          </div>
+        </div>
+
+        <div id="blePanel" class="indoor-panel" style="display:none;">
+          <button class="btn" id="bleScanBtn">&#128225; Scan for nearby beacons</button>
+          <span class="muted" id="bleStatus" style="margin-left:8px;"></span>
+        </div>
+
+        <div id="demoPanel" class="indoor-panel" style="display:none;">
+          <div class="demo-flag">&#9888; DEMO ONLY - this is NOT real physical positioning. Results are illustrative</div>
+          <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
+            <div class="form-group" style="flex:1;min-width:240px;">
+              <label>Pick a test zone</label>
+              <select id="demoZoneSelect"></select>
+            </div>
+            <button class="btn btn-warning" id="demoMatchBtn">&#128736; Simulate demo match</button>
+          </div>
+          <p class="text-sm text-muted" style="margin-top:8px;">
+            Demo mode is enabled by the admin for testing only. A real deployment must use actual
+            beacons / Wi-Fi to determine the room.
+          </p>
+        </div>
+
+        <div id="indoorResult"></div>
+      </div>
+
+      <div class="card" style="margin-top:16px;">
+        <div class="card-title">&#128274; Privacy note</div>
+        <p class="text-md text-muted">
+          Your location is checked only at the moment you verify attendance. The system does not track
+          your location continuously, and no other student can see where you are. Your face template is
+          stored as a mathematical embedding on the server; never as a photo.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/student-nav.js"></script>
+  <script src="js/location-check.js"></script>
+</body>
+</html>
